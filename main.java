@@ -1,6 +1,6 @@
 package TicTacToeBot;
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 
 public class main {
 
@@ -13,14 +13,10 @@ public class main {
     	int historyPrompt = 0;
     	Scanner input = new Scanner(System.in);
     	
-
     	do {
-    		
     		for (int i = 0; i < tiles.length; i++) { // showcases initial  board
-    			if ((i + 1)% 3 != 0) {
-    				System.out.print((i+1) + " ");
-    			} else
-    				System.out.println(i+1);
+    			if ((i + 1)% 3 != 0) System.out.print((i+1) + " ");
+    			else System.out.println(i+1);
     		}	
     		
 	    	while (gameEnd == 0) {    			
@@ -28,90 +24,33 @@ public class main {
 	    	    int tilesInput = input.nextInt() -1;
 	    	    input.nextLine(); 
 	    	    tiles[tilesInput] = 1;	   
-	    	    	    	        	    
-	    	    gameEnd = endFirstRow(tiles); // checks for game end from player side
-	    	    if (gameEnd == 0) {
-	    	        gameEnd = endSecondRow(tiles);
-	    	        if (gameEnd == 0) {
-	    	            gameEnd = endThirdRow(tiles);
-	    	            if (gameEnd == 0) {
-	    	            gameEnd = endFirstColumn(tiles);
-	    	                if (gameEnd == 0) {
-	    	                gameEnd = endSecondColumn(tiles);
-	    	                    if (gameEnd == 0) {
-	    	                    gameEnd = endThirdColumn(tiles);
-	    	                        if (gameEnd == 0) {
-	    	                        gameEnd = endFirstDiag(tiles);
-	    	                            if (gameEnd == 0) {
-	    	                            gameEnd = endSecondDiag(tiles);
-	    	                            }
-	    	                        }
-	    	                    }
-	    	                }
-	    	            }
-	    	        }
+
+	    	    gameEnd = checkGameEnd(tiles);	// checks for player 1
+
+				if (gameEnd == 0) {
+					System.out.println("Opponents turn");
+					tilesInput = randomOpponent(tiles);
+					tiles[tilesInput] = -1;
 	    	    }
-	    	    
-	            if (gameEnd == 0) {
-	    	    System.out.println("Opponents turn");
-	    	    tilesInput = randomOpponent(tiles);
-	    	    tiles[tilesInput] = -1;
-	            }
-	            
-	    	    if (gameEnd == 0) { // checks for game end from opponents side
-	    	        gameEnd = endSecondRow(tiles);
-	    	        if (gameEnd == 0) {
-	    	            gameEnd = endThirdRow(tiles);
-	    	            if (gameEnd == 0) {
-	    	            gameEnd = endFirstColumn(tiles);
-	    	                if (gameEnd == 0) {
-	    	                gameEnd = endSecondColumn(tiles);
-	    	                    if (gameEnd == 0) {
-	    	                    gameEnd = endThirdColumn(tiles);
-	    	                        if (gameEnd == 0) {
-	    	                        gameEnd = endFirstDiag(tiles);
-	    	                            if (gameEnd == 0) {
-	    	                            gameEnd = endSecondDiag(tiles);
-	    	                            }
-	    	                        }
-	    	                    }
-	    	                }
-	    	            }
-	    	        }
-	    	    }
-	    	    	    	    
+
+				gameEnd = checkGameEnd(tiles);	// checks for player 2
+
 	    	    for (int i = 0; i < tiles.length; i++) { // showcases current board
 	    			if ((i + 1)% 3 != 0) {
 	    				if (tiles[i] != 0) {
-	    					if (tiles[i] > 0) {
-	    					System.out.print("O ");
-	    					} else {
-	    						System.out.print("X ");
-	    					}
-	    				} else {
-	    				System.out.print((i+1) + " ");
-	    				}
-	    			} else {
-	    				if (tiles[i] != 0) {
-	    					if (tiles[i] > 0) {
-	        					System.out.println("O ");
-	        					} else {
-	        						System.out.println("X ");
-	        					}
-	    				} else {
-	    				System.out.println(i+1);
-	    				}
-	    			}
+	    					if (tiles[i] > 0) System.out.print("O ");
+							else System.out.print("X ");
+	    				} else System.out.print((i+1) + " ");
+	    			} else if (tiles[i] != 0) {
+	    					if (tiles[i] > 0) System.out.println("O ");
+	        				else System.out.println("X ");
+	    				} else System.out.println(i+1);
 	    		}
 	    	    
 	    	    // end game prompts
-	    	    if (gameEnd > 0) {
-	    	        System.out.println("Congrats, you win!");
-	    	    }
-	    	    else if (gameEnd < 0)  {
-	    	        System.out.println("Sorry, you lost!");
-	    	    }
-	    			
+	    	    if (gameEnd > 0) System.out.println("Congrats, you win!");
+	    	    else if (gameEnd < 0) System.out.println("Sorry, you lost!");
+
 	    	}
 	    	
 	    	// out of loop
@@ -122,17 +61,14 @@ public class main {
     				tiles[i] = 0;
     			}
     			
-	    		if (gamesCounter < 10)
-	    			gamesCounter += 1;
-	    		else 
-    				gamesCounter = 0;
+	    		if (gamesCounter < 10) gamesCounter += 1;
+	    		else gamesCounter = 0;
 
 		    	System.out.println("Would you like to continue? Y/N");
 	    	    String gameContinue = input.nextLine();
-	    		if (gameContinue.equals("Y") || gameContinue.equals("y")) {
-	    			gameEnd = 0;
-	    		} else 
-	    			gameStop = 1;
+
+	    		if (gameContinue.equals("Y") || gameContinue.equals("y")) gameEnd = 0;
+	    		else gameStop = 1;
 	    	}
 	    	
     	} while (gameStop == 0);
@@ -147,140 +83,132 @@ public class main {
 					if (tilesHistory[historyPrompt][i] != 0) {
 						if (tilesHistory[historyPrompt][i] > 0) {
 						System.out.print("O ");
-						} else {
-							System.out.print("X ");
-						}
-					} else {
-					System.out.print((i+1) + " ");
-					}
+						} else System.out.print("X ");
+					} else System.out.print((i+1) + " ");
 				} else {
 					if (tilesHistory[historyPrompt][i]!= 0) {
-						if (tilesHistory[historyPrompt][i] > 0) {
-	    					System.out.println("O ");
-	    					} else {
-	    						System.out.println("X ");
-	    					}
-					} else {
-					System.out.println(i+1);
-					}
+						if (tilesHistory[historyPrompt][i] > 0) System.out.println("O ");
+ 						else System.out.println("X ");
+					} else System.out.println(i+1);
 				}
 			}    	
     }
 
+	// mechanics
+	public static int checkGameEnd(int[] tile) {
+		int result;
 
+		result = endSecondRow(tile);
+		if (result != 0) return result;
+
+		result = endThirdRow(tile);
+		if (result != 0) return result;
+
+		result = endFirstColumn(tile);
+		if (result != 0) return result;
+
+		result = endSecondColumn(tile);
+		if (result != 0) return result;
+
+		result = endThirdColumn(tile);
+		if (result != 0) return result;
+
+		result = endFirstDiag(tile);
+		if (result != 0) return result;
+
+		return endSecondDiag(tile);
+	}
     
     // end game conditions
     
     public static int endFirstRow(int[] tilesRow) { 
     int check = tilesRow[0] + tilesRow[1] + tilesRow[2];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1;
+            else if (check < 0) result = -1;
         }
-    return returnValue;    
+	
+    return result;    
     }
     
     public static int endSecondRow(int[] tilesRow) { 
     int check = tilesRow[3] + tilesRow[4] + tilesRow[5];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1;
+			else if (check < 0) result = -1;
         }
-    return returnValue;    
+    return result;    
     }
     
     public static int endThirdRow(int[] tilesRow) { 
     int check = tilesRow[6] + tilesRow[7] + tilesRow[8];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1;
+            else if (check < 0) result = -1;
         }
-    return returnValue;    
+    return result;    
     }
     
     public static int endFirstColumn(int[] tilesRow) { 
     int check = tilesRow[0] + tilesRow[3] + tilesRow[6];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
-        }
-    return returnValue;    
+            if (check > 0) result = 1;
+    		else if (check < 0) result = -1;
+		}
+    return result;    
     }
 
     public static int endSecondColumn(int[] tilesRow) { 
     int check = tilesRow[1] + tilesRow[4] + tilesRow[7];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1;
+            else if (check < 0) result = -1;
         }
-    return returnValue;    
+    return result;    
     }
 
     public static int endThirdColumn(int[] tilesRow) { 
     int check = tilesRow[2] + tilesRow[5] + tilesRow[8];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1;
+            else if (check < 0) result = -1;
         }
-    return returnValue;    
+    return result;    
     }
 
     public static int endFirstDiag(int[] tilesRow) { 
     int check = tilesRow[0] + tilesRow[4] + tilesRow[8];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1; 
+			else if (check < 0) result = -1;
         }
-    return returnValue;    
+    return result;    
     }
 
     public static int endSecondDiag(int[] tilesRow) { 
     int check = tilesRow[2] + tilesRow[4] + tilesRow[6];
-    int returnValue = 0;
+    int result = 0;
     
         if (check % 3 == 0) {
-            if (check > 0) {
-            returnValue = 1;
-            } else if (check < 0) {
-                returnValue = -1;
-            }
+            if (check > 0) result = 1;
+			else if (check < 0) result = -1;
         }
-    return returnValue;    
+
+    return result;
     }
     
     // different CPU modes
