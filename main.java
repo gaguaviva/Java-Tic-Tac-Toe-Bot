@@ -10,7 +10,7 @@ public class main {
     	int gamesCounter = 0;
     	int gameEnd = 0;
     	int gameStop = 0;    	
-    	int historyPrompt = 0;
+    	int historyPrompt;
     	Scanner input = new Scanner(System.in);
     	
     	do {
@@ -96,7 +96,8 @@ public class main {
 
 	// mechanics
 	public static int checkGameEnd(int[] tile) {
-		int result;
+		int result = endFirstRow(tile);
+		if (result != 0) return result;
 
 		result = endSecondRow(tile);
 		if (result != 0) return result;
