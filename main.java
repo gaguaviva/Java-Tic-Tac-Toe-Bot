@@ -1,4 +1,3 @@
-package TicTacToeBot;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -95,6 +94,7 @@ public class main {
     }
 
 	// mechanics
+
 	public static int checkGameEnd(int[] tile) {
 		int result = endFirstRow(tile);
 		if (result != 0) return result;
@@ -222,5 +222,7 @@ public class main {
     	}
     	return randomNumber;
     }
+
+	
 }
 
